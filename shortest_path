@@ -1,0 +1,79 @@
+# Given a list of Point objects (where a Point object has a name, and a list of names it is connected to), a starting Point object, and an ending Point object, return a possible path between the two Points. If there are multiple paths, return the shortest one. If there is no path, return “no path”. 
+
+# Example: 
+
+# listOfPoints = [
+#   { name: "A", connections: ["B", "C"] },
+#   { name: "B", connections: ["A", "E"] },
+#   { name: "C", connections: ["A", "D"] },
+#   { name: "D", connections: ["C"] },
+#   { name: "E", connections: ["B", "F"] },
+#   { name: "F", connections: ["E"] },
+# ]
+
+# $ pathBetweenPoints(listOfPoints, "A", "F")
+# $ A -> B -> E -> F
+
+# Use Breadth-Frist Search with a queue
+# Since the edges have to weights, BFS should give the shortest path
+
+require 'set'
+
+def path_between_points(points, start, destination)
+  queue = []
+  visited = Set.new()
+  path = []
+  previous = {}
+
+  connections = points.reduce({}) do |agg, el|
+    agg[el[:name]] = el[:connections]
+    agg
+  end
+
+  queue << start
+  visited << start
+
+  while queue.any?
+    node = queue.shift()
+    if node == destination
+      return output_path(previous, destination)
+    end
+    connections[node].each do |connection|
+      if visited.add?(connection)
+        previous[connection] = node
+        queue << connection
+      end
+    end
+  end
+
+  "no path"
+end
+
+def output_path(previous_path_map, destination)
+  path = [destination]
+  current = destination
+  while !previous_path_map[current].nil?
+    previous_node = previous_path_map[current]
+    path << previous_node
+    current = previous_node
+  end
+  result = path.reverse()
+  result.join(" -> ")
+end
+
+
+points = [
+  { name: "A", connections: ["B", "C"] },
+  { name: "B", connections: ["E", "A"] },
+  { name: "C", connections: ["A", "D"] },
+  { name: "D", connections: ["C"] },
+  { name: "E", connections: ["B", "F"] },
+  { name: "F", connections: ["E"] },
+]
+
+puts(path_between_points(points, "A", "F"))
+# A -> B -> E -> F
+puts(path_between_points(points, "D", "B"))
+# D -> C -> A -> B
+
+
