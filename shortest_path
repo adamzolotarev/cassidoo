@@ -1,4 +1,6 @@
-# Given a list of Point objects (where a Point object has a name, and a list of names it is connected to), a starting Point object, and an ending Point object, return a possible path between the two Points. If there are multiple paths, return the shortest one. If there is no path, return “no path”. 
+# Given a list of Point objects (where a Point object has a name, and a list of names it is connected to),
+# a starting Point object, and an ending Point object, return a possible path between the two Points. 
+# If there are multiple paths, return the shortest one. If there is no path, return “no path”. 
 
 # Example: 
 
